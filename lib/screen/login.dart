@@ -1,0 +1,199 @@
+
+
+import 'package:flutter/material.dart';
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool _obscurePassword = true;
+
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [_buildImageHeader(screenHeight), _buildLoginForm()],
+        ),
+      ),
+    );
+  }
+
+  /// Top Image Section
+  Widget _buildImageHeader(double screenHeight) {
+    return ClipRRect(
+      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(50)),
+      child: Image.asset(
+        'assets/icons/image.png',
+        width: double.infinity,
+        height: screenHeight * 0.3,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
+  /// Login Form Section
+  Widget _buildLoginForm() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          const Text(
+            'Welcome Back',
+            style: TextStyle(
+              color: Color(0xFF5DB751),
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 5),
+          const Text(
+            'Login to your account',
+            style: TextStyle(color: Colors.black54, fontSize: 16),
+          ),
+          const SizedBox(height: 25),
+
+          /// Email Field
+          _buildTextField(
+            hintText: 'user@gmail.com',
+            icon: Icons.email,
+            obscureText: false,
+          ),
+
+          const SizedBox(height: 33),
+
+          /// Password Field
+          _buildTextField(
+            hintText: '1234@pse!',
+            icon: Icons.lock,
+            obscureText: _obscurePassword,
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                color: Colors.green,
+              ),
+              onPressed: () {
+                setState(() {
+                  _obscurePassword = !_obscurePassword;
+                });
+              },
+            ),
+          ),
+
+          const SizedBox(height: 9),
+
+          /// Forgot Password
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              onPressed: () {},
+              child: const Text(
+                'Forgot Password ?',
+                style: TextStyle(
+                  color: Color(0xFF5DB751),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 33),
+
+          /// Login Button
+          SizedBox(
+            width: double.infinity,
+            height: 38,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF5DB751),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(25),
+                ),
+              ),
+              child: const Text(
+                'Login',
+                style: TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          /// Sign Up Option
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                "Don't have an account? ",
+                style: TextStyle(color: Colors.black54),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text(
+                  'Sign up',
+                  style: TextStyle(
+                    color: Color(0xFF5DB751),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [Image.asset('assets/icons/Group 43.png')],
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Custom Input Field
+  Widget _buildTextField({
+    required String hintText,
+    required IconData icon,
+    required bool obscureText,
+    Widget? suffixIcon,
+
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFFE9F5E9),
+        borderRadius: BorderRadius.circular(10),
+
+      ),
+      child: SizedBox(
+        height: 40,
+        width: double.infinity,
+        child: TextField(
+        obscureText: obscureText,
+        
+        decoration: InputDecoration(
+          alignLabelWithHint: true,
+
+          
+          hintText: hintText,
+          hintStyle: const TextStyle(color: Color(0xff309255)),
+          border: InputBorder.none,
+          prefixIcon: Icon(icon, color: const Color(0xff309255)),
+          suffixIcon: suffixIcon,
+          contentPadding: const EdgeInsets.symmetric(vertical: 15),
+        ),
+      ),
+
+      ),
+      
+    );
+  }
+}
