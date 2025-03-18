@@ -1,7 +1,10 @@
 
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:waste_to_wealth/controllers/user_controller.dart';
+import 'package:waste_to_wealth/bloc/user_bloc.dart';
+import 'package:waste_to_wealth/screen/home.dart';
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -11,6 +14,21 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
+  final TextEditingController _usernameController=TextEditingController();
+  final TextEditingController _passwordController=TextEditingController();
+  final UserController _userController=UserController();
+  void _login()async{
+    final  username=_usernameController.text;
+    final  password=_passwordController.text;
+    final userBloc=BlocProvider.of<UserBloc>(context);
+    final user =await _userController.login(username, password,userBloc);
+    if(user!=null){
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>HomePage()),);
+    }
+    else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Invalid username or password')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +81,8 @@ class _LoginPageState extends State<LoginPage> {
 
           /// Email Field
           _buildTextField(
-            hintText: 'user@gmail.com',
+            hintText: 'your username',
+          controller: _usernameController,
             icon: Icons.email,
             obscureText: false,
           ),
@@ -73,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
           /// Password Field
           _buildTextField(
             hintText: '1234@pse!',
+            controller: _passwordController,
             icon: Icons.lock,
             obscureText: _obscurePassword,
             suffixIcon: IconButton(
@@ -112,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
             width: double.infinity,
             height: 38,
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: _login,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF5DB751),
                 shape: RoundedRectangleBorder(
@@ -123,6 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                 'Login',
                 style: TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.bold),
               ),
+            
             ),
           ),
 
@@ -162,6 +183,7 @@ class _LoginPageState extends State<LoginPage> {
   /// Custom Input Field
   Widget _buildTextField({
     required String hintText,
+    required TextEditingController controller,
     required IconData icon,
     required bool obscureText,
     Widget? suffixIcon,
@@ -177,6 +199,7 @@ class _LoginPageState extends State<LoginPage> {
         height: 40,
         width: double.infinity,
         child: TextField(
+          controller: controller,
         obscureText: obscureText,
         
         decoration: InputDecoration(
