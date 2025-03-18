@@ -10,6 +10,12 @@ class HomePage extends StatefulWidget {
 class _HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return MaterialApp(
+      home: Scaffold(
+        body:Container(
+          child: Text('hea;lll'),
+        ),
+      )
+    );
   }
 }
