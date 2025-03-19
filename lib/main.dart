@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import './screen/home.dart';
 import './screen/login.dart';
 import 'package:waste_to_wealth/bloc/user_bloc.dart';
+import 'package:waste_to_wealth/screen/pickup.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,10 +19,11 @@ class MyApp extends StatelessWidget {
       providers: [BlocProvider<UserBloc>(create: (context) => UserBloc())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/login',
+        initialRoute: '/pickup',
         routes: {
           '/': (context) => const HomePage(),
           '/login': (context) => const LoginPage(),
+          '/pickup': (context) => SchedulePickupScreen(),
         },
       ),
     );
