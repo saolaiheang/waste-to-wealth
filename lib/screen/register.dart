@@ -5,15 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:waste_to_wealth/controllers/user_controller.dart';
 import 'package:waste_to_wealth/bloc/user_bloc.dart';
 import 'package:waste_to_wealth/screen/home.dart';
-import 'package:waste_to_wealth/screen/register.dart';
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
-
+import 'package:waste_to_wealth/screen/login.dart';
+class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
   bool _obscurePassword = true;
   final TextEditingController _usernameController=TextEditingController();
   final TextEditingController _passwordController=TextEditingController();
@@ -47,7 +46,9 @@ class _LoginPageState extends State<LoginPage> {
 
   /// Top Image Section
   Widget _buildImageHeader(double screenHeight) {
-    return ClipRRect(
+    return Stack(
+      children: [
+         ClipRRect(
       borderRadius: const BorderRadius.vertical(bottom: Radius.circular(50)),
       child: Image.asset(
         'assets/icons/image.png',
@@ -55,7 +56,20 @@ class _LoginPageState extends State<LoginPage> {
         height: screenHeight * 0.3,
         fit: BoxFit.cover,
       ),
+      
+    ),
+    Positioned(
+      top: 50,
+      left: 31,
+    
+      child:IconButton(onPressed: (){
+                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>LoginPage()),);
+      }, icon:Image.asset('assets/icons/Frame 2.png',height: 42,width: 42,) )
+    )
+        
+      ],
     );
+   
   }
 
   /// Login Form Section
@@ -66,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           const SizedBox(height: 20),
           const Text(
-            'Welcome Back',
+            'Sign Up',
             style: TextStyle(
               color: Color(0xFF5DB751),
               fontSize: 28,
@@ -75,14 +89,14 @@ class _LoginPageState extends State<LoginPage> {
           ),
           const SizedBox(height: 5),
           const Text(
-            'Login to your account',
+            'Create your new account',
             style: TextStyle(color: Colors.black54, fontSize: 16),
           ),
           const SizedBox(height: 25),
 
           /// Email Field
           _buildTextField(
-            hintText: 'your username',
+            hintText: 'example@gmail.com',
           controller: _usernameController,
             icon: Icons.email,
             obscureText: false,
@@ -109,24 +123,18 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
 
-          const SizedBox(height: 9),
-
-          /// Forgot Password
-          Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton(
-              onPressed: () {},
-              child: const Text(
-                'Forgot Password ?',
-                style: TextStyle(
-                  color: Color(0xFF5DB751),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
+          const SizedBox(height: 33,),
+          _buildTextField(
+            hintText: 'Location',
+            controller: _passwordController,
+            icon: Icons.location_city,
+            obscureText: false,
+            
           ),
 
-          const SizedBox(height: 56),
+          
+
+          const SizedBox(height: 80),
 
           /// Login Button
           SizedBox(
@@ -141,38 +149,14 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               child: const Text(
-                'Login',
+                'Sign Up',
                 style: TextStyle(color: Colors.white, fontSize: 15,fontWeight: FontWeight.bold),
               ),
             
             ),
           ),
 
-          const SizedBox(height: 30),
-
-          /// Sign Up Option
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Don't have an account? ",
-                style: TextStyle(color: Colors.black54),
-              ),
-              TextButton(
-                onPressed: () {
-                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>RegisterPage()),);
-
-                },
-                child: const Text(
-                  'Sign up',
-                  style: TextStyle(
-                    color: Color(0xFF5DB751),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
+      
 
           const SizedBox(height: 20),
           Row(
