@@ -10,7 +10,7 @@ class SchedulePickupScreen extends StatefulWidget {
 
 class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
   DateTime selectedDate = DateTime.now();
-  List<String> selectedWasteTypes = []; // List to store multiple selections
+  List<String> selectedWasteTypes = []; 
   String selectedWeightUnit = "(kg)";
   bool recurringMonth = false;
   bool recurringWeek = false;
@@ -63,27 +63,23 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
 
   Future<void> _schedulePickup() async {
     try {
-      // Parse the selectedWeightUnit to extract the numeric value
       final weightValue = double.tryParse(
         selectedWeightUnit.replaceAll(RegExp(r'[^0-9.]'), ''),
-      ) ?? 0.0; // Provide a default value of 0.0 if parsing fails
+      ) ?? 0.0; 
 
-      // Call the API to create a new schedule
       final schedules = await _scheduleController.createNewSchedule(
-        userId: "1", // Replace with actual user ID
+        userId: "1",
         date: selectedDate.toIso8601String(),
         wasteTypes: selectedWasteTypes,
-        estimateWeight: weightValue, // Use the parsed or default value
+        estimateWeight: weightValue, 
         recurring: recurringMonth || recurringWeek || recurringDay,
       );
 
-      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Pickup scheduled successfully!')),
       );
 
-      // Update UI or navigate to another screen
-      // You can handle the schedules list here if needed
+      
     } catch (e) {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(

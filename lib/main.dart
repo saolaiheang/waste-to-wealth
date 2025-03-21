@@ -5,6 +5,8 @@ import './screen/login.dart';
 import 'package:waste_to_wealth/bloc/user_bloc.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
 
+import 'package:waste_to_wealth/screen/history.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -19,11 +21,12 @@ class MyApp extends StatelessWidget {
       providers: [BlocProvider<UserBloc>(create: (context) => UserBloc())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/pickup',
+        initialRoute: '/',
         routes: {
           '/': (context) => const HomePage(),
           '/login': (context) => const LoginPage(),
           '/pickup': (context) => SchedulePickupScreen(),
+          '/history': (context) =>  PickupScheduleHistory(),
         },
       ),
     );
