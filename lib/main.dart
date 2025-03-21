@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       providers: [BlocProvider<UserBloc>(create: (context) => UserBloc())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
+        initialRoute: '/history',
         routes: {
           '/': (context) => const HomePage(),
           '/login': (context) => const LoginPage(),

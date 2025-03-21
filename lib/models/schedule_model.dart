@@ -1,10 +1,9 @@
-
 class ScheduleModel {
   final int id;
   final String userId;
-  final DateTime date;
+  final String date;
   final List<String> wasteTypes;
-  final int estimateWeight;
+  final double estimateWeight;
   final bool recurring;
 
   ScheduleModel({
@@ -14,32 +13,16 @@ class ScheduleModel {
     required this.wasteTypes,
     required this.estimateWeight,
     required this.recurring,
-
   });
 
-  factory ScheduleModel.fromJson(Map<String,dynamic>json){
+  factory ScheduleModel.fromJson(Map<String, dynamic> json) {
     return ScheduleModel(
-      id: json['id'],
-      userId: json['userId'],
-      date: DateTime.parse(json['date']),
-      wasteTypes: List<String>.from(json['wasteTypes']),
-      estimateWeight: json['estimateWeight'],
-      recurring: json['recurring'],
-
+      id: json['id'] ?? 0, // Provide a default value if null
+      userId: json['userId'] ?? '',
+      date: json['date'] ?? '',
+      wasteTypes: (json['wasteTypes'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      estimateWeight: (json['estimateWeight'] as num?)?.toDouble() ?? 0.0, // Convert safely
+      recurring: json['recurring'] ?? false,
     );
-
-
   }
-  Map<String,dynamic>toJson(){
-    return {
-      'id':id,
-      'userId':userId,
-      'date':date.toIso8601String(),
-      'wasteTypes':wasteTypes,
-      'estimateWeight':estimateWeight,
-      'recurring':recurring,
-    
-    };
-  }
-
 }

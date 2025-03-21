@@ -14,7 +14,7 @@ class ScheduleController {
     return await _apiService.createNewSchedule(
       userId: userId,
       date: date,
-      wasteTypes: wasteTypes,
+      wasteTypes: wasteTypes.isNotEmpty ? wasteTypes : [],
       estimateWeight: estimateWeight,
       recurring: recurring,
     );
