@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:waste_to_wealth/controllers/schedule_controller.dart';
+import 'package:waste_to_wealth/screen/history.dart';
 
 class SchedulePickupScreen extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class SchedulePickupScreen extends StatefulWidget {
 
 class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
   DateTime selectedDate = DateTime.now();
-  List<String> selectedWasteTypes = []; 
+  List<String> selectedWasteTypes = [];
   String selectedWeightUnit = "(kg)";
   bool recurringMonth = false;
   bool recurringWeek = false;
@@ -27,31 +27,6 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
       initialDate: selectedDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData(
-            colorScheme: ColorScheme.light(
-              primary: Color(0xffFF972F), // Header color
-              onPrimary: Colors.white, // Header text color
-              surface: Color(0XFF6C9182), // Dialog background color
-              onSurface: Color.fromARGB(255, 254, 254, 254), // Default text color
-            ),
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: Color.fromARGB(255, 243, 241, 240),
-              ),
-            ),
-            dialogTheme: DialogTheme(
-              backgroundColor: Color(0XFF6C9182), // Background color
-            ),
-          ),
-          child: SizedBox(
-            width: double.infinity,
-            height: 200,
-            child: child!,
-          ),
-        );
-      },
     );
 
     if (picked != null && picked != selectedDate) {
@@ -63,28 +38,27 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
 
   Future<void> _schedulePickup() async {
     try {
-      final weightValue = double.tryParse(
-        selectedWeightUnit.replaceAll(RegExp(r'[^0-9.]'), ''),
-      ) ?? 0.0; 
+      final weightValue =
+          double.tryParse(
+            selectedWeightUnit.replaceAll(RegExp(r'[^0-9.]'), ''),
+          ) ??
+          0.0;
 
-      final schedules = await _scheduleController.createNewSchedule(
+      final _ = await _scheduleController.createNewSchedule(
         userId: "1",
         date: selectedDate.toIso8601String(),
         wasteTypes: selectedWasteTypes,
-        estimateWeight: weightValue, 
+        estimateWeight: weightValue,
         recurring: recurringMonth || recurringWeek || recurringDay,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Pickup scheduled successfully!')),
-      );
-
-      
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Pickup scheduled successfully!')));
     } catch (e) {
-      // Show error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to schedule pickup: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Failed to schedule pickup: $e')));
     }
   }
 
@@ -125,14 +99,13 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 37),
-
             _buildSectionTitle("Select Date/Time"),
             SizedBox(height: 15),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: _buildInputContainer(
                 "${selectedDate.toLocal()}".split(' ')[0],
-                'assets/icons/Vector(4).png', // Replace icon with image
+                'assets/icons/Vector(4).png',
               ),
             ),
             SizedBox(height: 15),
@@ -183,20 +156,33 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
               ),
               child: Text(
                 "Schedule Pickup",
-                style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             SizedBox(height: 26),
 
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) =>PickupScheduleHistory()),
+                );
+              },
               style: TextButton.styleFrom(
                 backgroundColor: Colors.blue,
                 minimumSize: Size(double.infinity, 50),
               ),
               child: Text(
                 "Schedule Pickup History",
-                style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -252,12 +238,13 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
               isExpanded: true,
               underline: SizedBox(),
               onChanged: onChanged,
-              items: items.map<DropdownMenuItem<String>>((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList(),
+              items:
+                  items.map<DropdownMenuItem<String>>((String item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Text(item),
+                    );
+                  }).toList(),
             ),
           ),
         ],
@@ -285,7 +272,9 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
       ),
       buttonIcon: Icon(Icons.arrow_drop_down, color: Colors.green),
       buttonText: Text(
-        selectedWasteTypes.isEmpty ? "Select Waste Types" : selectedWasteTypes.join(", "),
+        selectedWasteTypes.isEmpty
+            ? "Select Waste Types"
+            : selectedWasteTypes.join(", "),
         style: TextStyle(color: Colors.green),
       ),
       onConfirm: (results) {
