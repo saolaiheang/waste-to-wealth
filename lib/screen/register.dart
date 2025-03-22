@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:waste_to_wealth/controllers/user_controller.dart';
 import 'package:waste_to_wealth/bloc/user_bloc.dart';
-import 'package:waste_to_wealth/screen/home.dart';
+import 'package:waste_to_wealth/screen/homescreen.dart';
 import 'package:waste_to_wealth/screen/login.dart';
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
