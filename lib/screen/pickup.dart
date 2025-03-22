@@ -65,7 +65,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      // backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Text(
           "Schedule Pickup",
@@ -75,7 +75,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.white,
+        // backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: Image.asset('assets/icons/Frame 2.png', height: 80, width: 80),
@@ -90,7 +90,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
               backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
             ),
           ),
-          SizedBox(width: 40),
+          SizedBox(width: 30),
         ],
       ),
       body: Padding(
@@ -146,7 +146,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
                 recurringDay = value;
               });
             }),
-            SizedBox(height: 59),
+            SizedBox(height: 30),
 
             ElevatedButton(
               onPressed: _schedulePickup,
@@ -163,7 +163,7 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 26),
+            SizedBox(height: 10),
 
             TextButton(
               onPressed: () {

@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:waste_to_wealth/models/user_mdel.dart';
 import 'package:waste_to_wealth/services/storage_service.dart';
 import 'package:waste_to_wealth/models/schedule_model.dart';
+import 'package:waste_to_wealth/models/activity_model.dart';
 
 class ApiService {
   static const String baseUrl = 'https://pay1.jetdev.life';
@@ -69,5 +70,24 @@ class ApiService {
     } else {
       throw Exception('Failed to create schedule');
     }
+  }
+
+
+  Future<List<Activity>> fetchActivities({int limit = 20}) async {
+    final token = await _storageService.getToken(); // Retrieve token
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/account/activity?limit=$limit'),
+      headers: {'Authorization': 'Bearer $token'}, // Use token
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Activity.fromJson(json)).toList();
+    }
+    return [];
   }
 }
