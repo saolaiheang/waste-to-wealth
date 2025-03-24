@@ -27,7 +27,7 @@ class _ActivityListPageState extends State<ActivityListPage> {
         ),
         backgroundColor: Colors.green[500],
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon:  Image.asset('assets/icons/Frame 2.png', height: 50, width: 50),
           onPressed: () {
             Navigator.pop(context);
           },
