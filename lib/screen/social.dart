@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:waste_to_wealth/screen/history.dart';
 import 'package:waste_to_wealth/screen/profile.dart';
 
+import 'package:waste_to_wealth/screen/newSocial.dart';
+
+
 void main() {
   runApp(const SocialPage());
 }
@@ -37,7 +40,12 @@ class WasteToWealthScreen extends StatelessWidget {
 
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreatePostScreen()),
+                );
+            },
             icon: Image.asset('assets/icons/Frame 49.png'),
           ),
           IconButton(
@@ -91,6 +99,7 @@ class PostInputField extends StatelessWidget {
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: "What's on your mind?",
+                    
 
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40),
