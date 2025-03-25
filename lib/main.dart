@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       providers: [BlocProvider<UserBloc>(create: (context) => UserBloc())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/social', 
+        initialRoute: '/splash', 
 
         routes: {
           '/splash': (context) => const SplashScreen(),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:waste_to_wealth/screen/history.dart';
+import 'package:waste_to_wealth/screen/profile.dart';
 
 void main() {
   runApp(const SocialPage());
@@ -67,7 +69,7 @@ class WasteToWealthScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(),
+      bottomNavigationBar: _buildBottomNavBar(context),
     );
   }
 }
@@ -184,18 +186,39 @@ class PostCard extends StatelessWidget {
 }
 
 
- Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      backgroundColor: Colors.green.shade200,
-      selectedItemColor: Colors.green[900],
-      unselectedItemColor: Colors.green[700],
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social",),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
-    );
-  }
+  Widget _buildBottomNavBar(BuildContext context) {
+  return BottomNavigationBar(
+    backgroundColor: Colors.green.shade200,
+    selectedItemColor: Colors.green[900],
+    unselectedItemColor: Colors.green[700],
+    type: BottomNavigationBarType.fixed,
+    onTap: (int index) {
+      if (index == 1) {
+        // Navigate to History page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PickupScheduleHistory()),
+        );
+      } else if (index == 2) {
+        // Navigate to Social page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SocialPage()), // Replace with your actual SocialPage class
+        );
+      } else if (index == 3) {
+        // Navigate to Profile page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage()), // Replace with your actual ProfilePage class
+        );
+      }
+    },
+    items: const [
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+      BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+      BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+    ],
+  );
+}
 
