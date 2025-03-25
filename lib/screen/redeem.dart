@@ -31,34 +31,44 @@ class _RedeemPageState extends State<RedeemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+        title: const Text(
+          'Pickup History',
+          style: TextStyle(
+            color: Color(0xff5DB751),
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        leading: IconButton(
+          icon: Image.asset('assets/icons/Frame 2.png', height: 50, width: 50),
+          onPressed: () {
+            Navigator.pop(context); 
+               }// Navigate back to home page
+
+            ),
+          
+        
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
+            ),
+          ),
+        ],
+        ),
+      
+        
+
       body: SafeArea(
+        
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Image.asset('assets/icons/Frame 2.png', height: 50, width: 50),
-                    onPressed: () {
-                      Navigator.pop(context); // Navigate back to home page
-                    },
-                  ),
-                  Text(
-                    "Redeem",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[500],
-                    ),
-                  ),
-                  CircleAvatar(
-                    backgroundImage: AssetImage("assets/icons/Ellipse 12.png"),
-                  ),
-                ],
-              ),
+            
               SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.all(16),

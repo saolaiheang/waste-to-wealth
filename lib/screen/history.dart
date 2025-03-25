@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
+import 'package:waste_to_wealth/controllers/history_pickup_controller.dart';
+import 'package:waste_to_wealth/models/history_pickup_model.dart';
 import 'package:waste_to_wealth/screen/homescreen.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
-import 'package:waste_to_wealth/screen/profile.dart'; // Assuming ProfilePage exists
-
+import 'package:waste_to_wealth/screen/profile.dart';
 
 class PickupScheduleHistory extends StatefulWidget {
   const PickupScheduleHistory({super.key});
@@ -13,8 +14,7 @@ class PickupScheduleHistory extends StatefulWidget {
 }
 
 class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
-  final HistoryPickupController _historyPickupController =
-      HistoryPickupController();
+  final HistoryPickupController _historyPickupController = HistoryPickupController();
   List<HistoryPickupModel> schedules = [];
   bool isLoading = true;
   String errorMessage = '';
@@ -27,8 +27,7 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
 
   Future<void> _fetchHistory() async {
     try {
-      List<HistoryPickupModel> history =
-          await _historyPickupController.fetchHistoryPickup();
+      List<HistoryPickupModel> history = await _historyPickupController.fetchHistoryPickup();
       setState(() {
         schedules = history;
         isLoading = false;
@@ -96,43 +95,6 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100),
-        child: Container(
-          margin: EdgeInsets.only(top: 40),
-          child: AppBar(
-            elevation: 0,
-            title: Text(
-              'Pickup History',
-              style: TextStyle(
-                color: Colors.green,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            leading: IconButton(
-              icon: Image.asset(
-                'assets/icons/Frame 2.png',
-                height: 80,
-                width: 80,
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
-                );
-              },
-            ),
-            actions: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
-                ),
-              ),
-              SizedBox(width: 33),
-            ],
-
       appBar: AppBar(
         title: const Text(
           'Pickup History',
@@ -140,7 +102,6 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
             color: Color(0xff5DB751),
             fontSize: 22,
             fontWeight: FontWeight.bold,
-
           ),
         ),
         leading: IconButton(
@@ -171,92 +132,91 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
               style: TextStyle(fontSize: 16, color: Colors.black54),
             ),
             const SizedBox(height: 12),
-            isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : errorMessage.isNotEmpty
-                ? Center(
-                  child: Text(
-                    errorMessage,
-                    style: const TextStyle(color: Colors.red, fontSize: 16),
-                  ),
-                )
-                : schedules.isEmpty
-                ? const Center(child: Text("No pickup history available"))
-                : Expanded(
-                  child: RefreshIndicator(
-                    onRefresh: _fetchHistory,
-                    child: ListView.builder(
-                      itemCount: schedules.length,
-                      itemBuilder: (context, index) {
-                        final schedule = schedules[index];
-                        return Card(
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          elevation: 3,
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      formatDate(schedule.date),
+            if (isLoading)
+              const Center(child: CircularProgressIndicator())
+            else if (errorMessage.isNotEmpty)
+              Center(
+                child: Text(
+                  errorMessage,
+                  style: const TextStyle(color: Colors.red, fontSize: 16),
+                ),
+              )
+            else if (schedules.isEmpty)
+              const Center(child: Text("No pickup history available"))
+            else
+              Expanded(
+                child: RefreshIndicator(
+                  onRefresh: _fetchHistory,
+                  child: ListView.builder(
+                    itemCount: schedules.length,
+                    itemBuilder: (context, index) {
+                      final schedule = schedules[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8.0),
+                        elevation: 3,
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    formatDate(schedule.date),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    schedule.wasteTypes.join(", "),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black54,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              GestureDetector(
+                                onTap: schedule.status.toLowerCase() == 'scheduled'
+                                    ? () => onCancelClick(index)
+                                    : null,
+                                child: Container(
+                                  height: 30,
+                                  width: 100,
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 5,
+                                    horizontal: 12,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: getStatusColor(schedule.status),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      schedule.status,
                                       style: const TextStyle(
-                                        fontSize: 16,
+                                        color: Colors.white,
                                         fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      schedule.wasteTypes.join(", "),
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                GestureDetector(
-                                  onTap:
-                                      schedule.status.toLowerCase() ==
-                                              'scheduled'
-                                          ? () => onCancelClick(index)
-                                          : null,
-                                  child: Container(
-                                    height: 30,
-                                    width: 100,
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 5,
-                                      horizontal: 12,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: getStatusColor(schedule.status),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        schedule.status,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
                 ),
+              ),
           ],
         ),
       ),
-      bottomNavigationBar: buildBottomNavBar(context), // Attach BottomNavBar
+      bottomNavigationBar: buildBottomNavBar(context),
     );
   }
 
@@ -266,25 +226,12 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
       selectedItemColor: Colors.green[900],
       unselectedItemColor: Colors.green[700],
       type: BottomNavigationBarType.fixed,
-      currentIndex: 1, // Ensure "History" is highlighted
+      currentIndex: 1,
       onTap: (int index) {
         if (index == 0) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()), // Navigate to Home
-          );
-        } else if (index == 1) {
-          // Already on PickupScheduleHistory, no action needed
-        } else if (index == 2) {
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => SocialPage()), // Navigate to Social
-          // );
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
         } else if (index == 3) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage()), // Navigate to Profile
-          );
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfilePage()));
         }
       },
       items: const [

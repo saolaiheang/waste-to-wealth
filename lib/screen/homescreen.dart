@@ -8,6 +8,7 @@ import 'package:waste_to_wealth/screen/history.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
 import 'package:waste_to_wealth/screen/profile.dart';
 import 'package:waste_to_wealth/screen/redeem.dart';
+import 'package:waste_to_wealth/screen/social.dart';
 
 
 // Main HomePage Widget
@@ -405,10 +406,10 @@ class HomePageState extends State<HomePage> {
         );
       } else if (index == 2) {
         // Navigate to Social page
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SocialPage()), // Replace with your actual SocialPage class
-        // );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SocialPage()), // Replace with your actual SocialPage class
+        );
       } else if (index == 3) {
         // Navigate to Profile page
         Navigator.push(
@@ -425,19 +426,4 @@ class HomePageState extends State<HomePage> {
     ],
   );
 }
-
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      backgroundColor: Colors.green.shade200,
-      selectedItemColor: Colors.green[900],
-      unselectedItemColor: Colors.green[700],
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social",),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
-    );
-  }
 }
