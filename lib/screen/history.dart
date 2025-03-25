@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:waste_to_wealth/screen/homescreen.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
+import 'package:waste_to_wealth/screen/profile.dart'; // Assuming ProfilePage exists
 
 class PickupScheduleHistory extends StatefulWidget {
   @override
@@ -60,7 +61,10 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
                 width: 80,
               ),
               onPressed: () {
-                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context)=>SchedulePickupScreen()),);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
+                );
               },
             ),
             actions: [
@@ -144,6 +148,43 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
           ],
         ),
       ),
+      bottomNavigationBar: buildBottomNavBar(context), // Attach BottomNavBar
+    );
+  }
+
+  Widget buildBottomNavBar(BuildContext context) {
+    return BottomNavigationBar(
+      backgroundColor: Colors.green.shade200,
+      selectedItemColor: Colors.green[900],
+      unselectedItemColor: Colors.green[700],
+      type: BottomNavigationBarType.fixed,
+      currentIndex: 1, // Ensure "History" is highlighted
+      onTap: (int index) {
+        if (index == 0) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Navigate to Home
+          );
+        } else if (index == 1) {
+          // Already on PickupScheduleHistory, no action needed
+        } else if (index == 2) {
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => SocialPage()), // Navigate to Social
+          // );
+        } else if (index == 3) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()), // Navigate to Profile
+          );
+        }
+      },
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+      ],
     );
   }
 }

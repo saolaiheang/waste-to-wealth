@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:waste_to_wealth/models/homescreen_model.dart';
 import 'package:waste_to_wealth/models/user_mdel.dart';
 import 'package:waste_to_wealth/services/storage_service.dart';
 import 'package:waste_to_wealth/models/schedule_model.dart';
@@ -90,4 +91,39 @@ class ApiService {
     }
     return [];
   }
+  
+
+
+  
+  Future<int> fetchTotalPoints() async {
+  final token = await _storageService.getToken();
+  if (token == null) {
+    throw Exception('Token not found');
+  }
+
+  final response = await http.get(
+    Uri.parse('$baseUrl/api/account/points'),
+    headers: {'Authorization': 'Bearer $token'},
+  );
+
+  if (response.statusCode == 200) {
+    final data = json.decode(response.body);
+    print(data); // Debugging to check API response
+
+    if (data.containsKey('totalPoints') && data['totalPoints'] is int) {
+      return data['totalPoints']; // Return the integer value directly
+    } else {
+      throw Exception('Invalid response format: totalPoints is missing or not an integer');
+    }
+  }
+
+  throw Exception('Failed to fetch points');
 }
+
+}
+
+
+
+
+
+

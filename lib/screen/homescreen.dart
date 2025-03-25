@@ -1,19 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:waste_to_wealth/controllers/activity_controller.dart';
+import 'package:waste_to_wealth/controllers/homescreen_controller.dart';
+import 'package:waste_to_wealth/models/activity_model.dart';
 import 'package:waste_to_wealth/screen/activity.dart';
+import 'package:waste_to_wealth/screen/history.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
+import 'package:waste_to_wealth/screen/profile.dart';
 import 'package:waste_to_wealth/screen/redeem.dart';
 
 
 // Main HomePage Widget
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  HomePageState createState() => HomePageState();
+}
+
+class HomePageState extends State<HomePage> {
+  final TotalPointsController homescreenController = TotalPointsController();
+  Future<Future<int>> get homescreenData async {
+    return homescreenController.fetchHomescreen();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      bottomNavigationBar: _buildBottomNavBar(),
+      bottomNavigationBar: _buildBottomNavBar(context),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -46,22 +61,35 @@ class HomePage extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.card_giftcard, color: Colors.red, size: 50),
+              Icon(Icons.eco, color: Colors.green, size: 100),
               const SizedBox(width: 8),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
+                children: [
+                  const Text(
                     "Rewards Balance",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
-                  Text(
-                    "1963P",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
-                    ),
+                  // Use FutureBuilder to show total points once data is fetched
+                  FutureBuilder<int>(
+                    future: TotalPointsController().fetchHomescreen(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        // Use snapshot.data directly since it's an integer
+                        return Text(
+                          'Total Points: ${snapshot.data}', // No need for `totalPoints` property
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        );
+                      }
+                    },
                   ),
                 ],
               ),
@@ -89,9 +117,7 @@ class HomePage extends StatelessWidget {
               // Navigate to a new page (Add your Redeem functionality here)
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  RedeemPage(),
-                ),
+                MaterialPageRoute(builder: (context) => RedeemPage()),
               );
             },
             child: const Row(
@@ -121,9 +147,7 @@ class HomePage extends StatelessWidget {
               // Navigate to the ActivityListPage
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (context) =>  SchedulePickupScreen(),
-                ),
+                MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
               );
             },
             child: const Row(
@@ -165,10 +189,8 @@ class HomePage extends StatelessWidget {
           gridData: FlGridData(
             show: true,
             drawHorizontalLine: true,
-            getDrawingHorizontalLine: (value) => FlLine(
-              color: Colors.grey.shade300,
-              strokeWidth: 1,
-            ),
+            getDrawingHorizontalLine:
+                (value) => FlLine(color: Colors.grey.shade300, strokeWidth: 1),
             drawVerticalLine: false,
           ),
           titlesData: FlTitlesData(
@@ -222,9 +244,7 @@ class HomePage extends StatelessWidget {
                 FlSpot(5, 1000),
               ],
               isCurved: true,
-              gradient: LinearGradient(
-                colors: [Colors.blue, Colors.purple],
-              ),
+              gradient: LinearGradient(colors: [Colors.blue, Colors.purple]),
               barWidth: 4,
               isStrokeCapRound: true,
               belowBarData: BarAreaData(
@@ -282,37 +302,33 @@ class HomePage extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: ListView(
-              children: [
-                _buildActivityTile(
-                  "Plastic Collection",
-                  "3.5 kg",
-                  "+10 points",
-                  "today",
-                  Colors.green,
-                ),
-                _buildActivityTile(
-                  "Electronic Collection",
-                  "3.5 kg",
-                  "+10 points",
-                  "yesterday",
-                  Colors.green,
-                ),
-                _buildActivityTile(
-                  "Metal Collection",
-                  "3.5 kg",
-                  "+10 points",
-                  "2 hours ago",
-                  Colors.green,
-                ),
-                _buildActivityTile(
-                  "Points Redeemed",
-                  "\$5.00",
-                  "-25 points",
-                  "2 days ago",
-                  Colors.red,
-                ),
-              ],
+            child: FutureBuilder<List<Activity>>(
+              future:ActivityController().fetchActivities(), // Create an instance first
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (snapshot.hasError) {
+                  print("Error fetching activities: ${snapshot.error}");
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return const Center(child: Text('No activities found.'));
+                }
+
+                // Display activities
+                return ListView.builder(
+                  itemCount: 6,
+                  itemBuilder: (context, index) {
+                    final activity = snapshot.data![index];
+                    return _buildActivityTile(
+                      activity.title,
+                      activity.description,
+                      "+10 points", // Replace with actual points if available
+                      activity.date.toString(), // Format this properly
+                      Colors.green,
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],
@@ -373,18 +389,40 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomNavBar() {
-    return BottomNavigationBar(
-      backgroundColor: Colors.green.shade200,
-      selectedItemColor: Colors.green[900],
-      unselectedItemColor: Colors.green[700],
-      type: BottomNavigationBarType.fixed,
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
-    );
-  }
+  Widget _buildBottomNavBar(BuildContext context) {
+  return BottomNavigationBar(
+    backgroundColor: Colors.green.shade200,
+    selectedItemColor: Colors.green[900],
+    unselectedItemColor: Colors.green[700],
+    type: BottomNavigationBarType.fixed,
+    onTap: (int index) {
+      if (index == 1) {
+        // Navigate to History page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => PickupScheduleHistory()),
+        );
+      } else if (index == 2) {
+        // Navigate to Social page
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => SocialPage()), // Replace with your actual SocialPage class
+        // );
+      } else if (index == 3) {
+        // Navigate to Profile page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ProfilePage()), // Replace with your actual ProfilePage class
+        );
+      }
+    },
+    items: const [
+      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+      BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+      BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
+      BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+    ],
+  );
+}
+
 }
