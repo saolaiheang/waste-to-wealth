@@ -6,6 +6,7 @@ import 'package:waste_to_wealth/screen/homescreen.dart';
 import 'package:waste_to_wealth/screen/login.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
 import 'package:waste_to_wealth/screen/social.dart';
+import 'package:waste_to_wealth/screen/newSocial.dart';
 
 import 'package:waste_to_wealth/screen/splashscreen.dart'; // Ensure this file exists
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
       providers: [BlocProvider<UserBloc>(create: (context) => UserBloc())],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/social', 
+        initialRoute: '/newSocial', 
 
         routes: {
           '/splash': (context) => const SplashScreen(),
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           '/pickup': (context) => SchedulePickupScreen(),
           '/istory': (context) => PickupScheduleHistory(),
           '/social': (context) => SocialPage(),
+          '/newSocial': (context) => CreatePostScreen(),
         },
       ),
     );
