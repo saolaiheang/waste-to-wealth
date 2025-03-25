@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import 'package:waste_to_wealth/screen/homescreen.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
-import 'package:waste_to_wealth/controllers/history_pickup_controller.dart';
-import 'package:waste_to_wealth/models/history_pickup_model.dart';
+import 'package:waste_to_wealth/screen/profile.dart'; // Assuming ProfilePage exists
+
 
 class PickupScheduleHistory extends StatefulWidget {
   const PickupScheduleHistory({super.key});
@@ -95,6 +96,43 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: Container(
+          margin: EdgeInsets.only(top: 40),
+          child: AppBar(
+            elevation: 0,
+            title: Text(
+              'Pickup History',
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            leading: IconButton(
+              icon: Image.asset(
+                'assets/icons/Frame 2.png',
+                height: 80,
+                width: 80,
+              ),
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
+                );
+              },
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
+                ),
+              ),
+              SizedBox(width: 33),
+            ],
+
       appBar: AppBar(
         title: const Text(
           'Pickup History',
@@ -102,6 +140,7 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
             color: Color(0xff5DB751),
             fontSize: 22,
             fontWeight: FontWeight.bold,
+
           ),
         ),
         leading: IconButton(
@@ -217,6 +256,43 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
           ],
         ),
       ),
+      bottomNavigationBar: buildBottomNavBar(context), // Attach BottomNavBar
+    );
+  }
+
+  Widget buildBottomNavBar(BuildContext context) {
+    return BottomNavigationBar(
+      backgroundColor: Colors.green.shade200,
+      selectedItemColor: Colors.green[900],
+      unselectedItemColor: Colors.green[700],
+      type: BottomNavigationBarType.fixed,
+      currentIndex: 1, // Ensure "History" is highlighted
+      onTap: (int index) {
+        if (index == 0) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomePage()), // Navigate to Home
+          );
+        } else if (index == 1) {
+          // Already on PickupScheduleHistory, no action needed
+        } else if (index == 2) {
+          // Navigator.pushReplacement(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => SocialPage()), // Navigate to Social
+          // );
+        } else if (index == 3) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()), // Navigate to Profile
+          );
+        }
+      },
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+      ],
     );
   }
 }
