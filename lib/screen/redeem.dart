@@ -41,7 +41,7 @@ class _RedeemPageState extends State<RedeemPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   IconButton(
-                    icon: Icon(Icons.arrow_back),
+                    icon: Image.asset('assets/icons/Frame 2.png', height: 50, width: 50),
                     onPressed: () {
                       Navigator.pop(context); // Navigate back to home page
                     },
@@ -55,7 +55,7 @@ class _RedeemPageState extends State<RedeemPage> {
                     ),
                   ),
                   CircleAvatar(
-                    backgroundImage: AssetImage("assets/user.jpg"),
+                    backgroundImage: AssetImage("assets/icons/Ellipse 12.png"),
                   ),
                 ],
               ),

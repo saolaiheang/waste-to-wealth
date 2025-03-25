@@ -389,6 +389,7 @@ class HomePageState extends State<HomePage> {
     );
   }
 
+
   Widget _buildBottomNavBar(BuildContext context) {
   return BottomNavigationBar(
     backgroundColor: Colors.green.shade200,
@@ -425,4 +426,18 @@ class HomePageState extends State<HomePage> {
   );
 }
 
+  Widget _buildBottomNavBar() {
+    return BottomNavigationBar(
+      backgroundColor: Colors.green.shade200,
+      selectedItemColor: Colors.green[900],
+      unselectedItemColor: Colors.green[700],
+      type: BottomNavigationBarType.fixed,
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
+        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social",),
+        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+      ],
+    );
+  }
 }

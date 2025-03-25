@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:waste_to_wealth/models/homescreen_model.dart';
 import 'package:waste_to_wealth/models/user_mdel.dart';
 import 'package:waste_to_wealth/services/storage_service.dart';
 import 'package:waste_to_wealth/models/schedule_model.dart';
 import 'package:waste_to_wealth/models/activity_model.dart';
+import 'package:waste_to_wealth/models/history_pickup_model.dart';
 
 class ApiService {
   static const String baseUrl = 'https://pay1.jetdev.life';
@@ -73,7 +75,6 @@ class ApiService {
     }
   }
 
-
   Future<List<Activity>> fetchActivities({int limit = 20}) async {
     final token = await _storageService.getToken(); // Retrieve token
     if (token == null) {
@@ -91,6 +92,7 @@ class ApiService {
     }
     return [];
   }
+
   
 
 
@@ -120,6 +122,81 @@ class ApiService {
   throw Exception('Failed to fetch points');
 }
 
+
+  Future<List<HistoryPickupModel>> fetchHistoryPickup() async {
+    final token = await _storageService.getToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse('$baseUrl/api/pickup/history'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<HistoryPickupModel> historyList =
+            data.map((item) => HistoryPickupModel.fromJson(item)).toList();
+
+        return historyList;
+      } else {
+        print("Error fetching data: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("API Error: $e");
+      }
+      return [];
+    }
+  }
+
+  Future<List<HistoryPickupModel>> deleteHistoryPickup(int pickupId) async {
+    final token = await _storageService.getToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    try {
+      final response = await http.delete(
+        Uri.parse('$baseUrl/api/pickup/cancel/$pickupId'),
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        if (response.body.isNotEmpty) {
+          final jsonData = json.decode(response.body);
+
+          if (jsonData is Map<String, dynamic>) {
+            print("API Response: $jsonData"); // Debugging
+
+            if (jsonData.containsKey("message")) {
+              print("Pickup canceled: ${jsonData["message"]}");
+            }
+
+            return [];
+          }
+
+          if (jsonData is List) {
+            return jsonData
+                .map((item) => HistoryPickupModel.fromJson(item))
+                .toList();
+          }
+        }
+        return [];
+      } else {
+        print("Error fetching data: ${response.statusCode}");
+        throw Exception('Failed to delete pickup: ${response.statusCode}');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("API Error: $e");
+      }
+      throw Exception('Failed to delete pickup: $e');
+    }
+  }
 }
 
 
