@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../screen/components/navigate.dart';
 import 'package:waste_to_wealth/controllers/history_pickup_controller.dart';
 import 'package:waste_to_wealth/models/history_pickup_model.dart';
-import 'package:waste_to_wealth/screen/homescreen.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
-import 'package:waste_to_wealth/screen/profile.dart';
+
 
 class PickupScheduleHistory extends StatefulWidget {
   const PickupScheduleHistory({super.key});
@@ -95,6 +95,7 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+          bottomNavigationBar: BottomNavBar(currentIndex: 1),
       appBar: AppBar(
         title: const Text(
           'Pickup History',
@@ -216,30 +217,9 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
           ],
         ),
       ),
-      bottomNavigationBar: buildBottomNavBar(context),
     );
   }
 
-  Widget buildBottomNavBar(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: Colors.green.shade200,
-      selectedItemColor: Colors.green[900],
-      unselectedItemColor: Colors.green[700],
-      type: BottomNavigationBarType.fixed,
-      currentIndex: 1,
-      onTap: (int index) {
-        if (index == 0) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-        } else if (index == 3) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfilePage()));
-        }
-      },
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
-    );
+ 
   }
-}
+
