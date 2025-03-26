@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:waste_to_wealth/controllers/schedule_controller.dart';
 import 'package:waste_to_wealth/screen/history.dart';
+import 'package:waste_to_wealth/screen/components/header.dart';
 
 class SchedulePickupScreen extends StatefulWidget {
   @override
@@ -66,33 +67,8 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        title: Text(
-          "Schedule Pickup",
-          style: TextStyle(
-            color: Color(0xff5DB751),
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        // backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Image.asset('assets/icons/Frame 2.png', height: 80, width: 80),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
-            ),
-          ),
-          SizedBox(width: 30),
-        ],
-      ),
+      appBar: HeaderBar(title: 'Schedule Pickup'),
+      
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(

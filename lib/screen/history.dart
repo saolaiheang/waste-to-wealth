@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:waste_to_wealth/screen/pickup.dart';
 import 'package:waste_to_wealth/controllers/history_pickup_controller.dart';
 import 'package:waste_to_wealth/models/history_pickup_model.dart';
+import 'package:waste_to_wealth/screen/components/header.dart';
+import 'package:waste_to_wealth/screen/pickup.dart';
 
 class PickupScheduleHistory extends StatefulWidget {
   const PickupScheduleHistory({super.key});
@@ -54,37 +55,9 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
     }
   }
 
-  // Future<void> onCancelClick(int index) async {
-  //   final schedule = schedules[index];
-  //   if (schedule.status.toLowerCase() == 'scheduled') {
-  //     try {
-  //       setState(() => isLoading = true);
-  //       await _historyPickupController.deleteHistoryPickup(schedule.pickupId);
-  //       setState(() {
-  //         schedules.removeAt(index);
-  //         isLoading = false;
-  //       });
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text('Pickup canceled successfully!'),
-  //           backgroundColor: Colors.green,
-  //         ),
-  //       );
-  //     } catch (e) {
-  //       setState(() => isLoading = false);
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text('Failed to cancel pickup: $e'),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //       print("Error canceling pickup: $e");
-  //     }
-  //   }
-  // }
-Future<void> onCancelClick(int index) async {
+  Future<void> onCancelClick(int index) async {
     final schedule = schedules[index];
-    
+
     // Show confirmation dialog if the status is 'scheduled'
     if (schedule.status.toLowerCase() == 'scheduled') {
       bool? isConfirmed = await showDialog<bool>(
@@ -139,6 +112,7 @@ Future<void> onCancelClick(int index) async {
       }
     }
   }
+
   String formatDate(String dateString) {
     try {
       DateTime date = DateTime.parse(dateString);
@@ -151,33 +125,16 @@ Future<void> onCancelClick(int index) async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Pickup History',
-          style: TextStyle(
-            color: Color(0xff5DB751),
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          icon: Image.asset('assets/icons/Frame 2.png', height: 50, width: 50),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
-            );
-          },
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
-            ),
-          ),
-        ],
+      appBar: HeaderBar(
+        title: 'History Pickup',
+        onBackPress: () {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
+          );
+        },
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
