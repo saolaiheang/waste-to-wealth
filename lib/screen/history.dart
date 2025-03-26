@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../screen/components/navigate.dart';
 import 'package:waste_to_wealth/controllers/history_pickup_controller.dart';
 import 'package:waste_to_wealth/models/history_pickup_model.dart';
+import 'package:waste_to_wealth/screen/pickup.dart';
+
+
 import 'package:waste_to_wealth/screen/components/header.dart';
 import 'package:waste_to_wealth/screen/pickup.dart';
+
 
 class PickupScheduleHistory extends StatefulWidget {
   const PickupScheduleHistory({super.key});
@@ -232,4 +237,4 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
       ),
     );
   }
-}
+

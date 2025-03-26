@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waste_to_wealth/controllers/homescreen_controller.dart';
-import 'package:waste_to_wealth/screen/history.dart';
-import 'package:waste_to_wealth/screen/homescreen.dart';
+import '../screen/components/navigate.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -64,7 +63,7 @@ class ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNavBar(context), // Attach BottomNavBar
+      bottomNavigationBar: BottomNavBar(currentIndex: 3), // Attach BottomNavBar
     );
   }
 
@@ -148,41 +147,4 @@ class ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
-  Widget _buildBottomNavBar(BuildContext context) {
-    return BottomNavigationBar(
-      backgroundColor: Colors.green.shade200,
-      selectedItemColor: Colors.green[900],
-      unselectedItemColor: Colors.green[700],
-      type: BottomNavigationBarType.fixed,
-      currentIndex: 3, // Ensure "Profile" is highlighted
-      onTap: (int index) {
-        if (index == 0) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomePage()),
-          );
-        } else if (index == 1) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => PickupScheduleHistory()),
-          );
-        } else if (index == 2) {
-          // Uncomment and replace with actual SocialPage when available
-          // Navigator.pushReplacement(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => SocialPage()),
-          // );
-        } else if (index == 3) {
-          // Do nothing, already on ProfilePage
-        }
-      },
-      items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-        BottomNavigationBarItem(icon: Icon(Icons.history), label: "History"),
-        BottomNavigationBarItem(icon: Icon(Icons.people), label: "Social"),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
-      ],
-    );
   }
-}
