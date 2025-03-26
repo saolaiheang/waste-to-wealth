@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waste_to_wealth/screen/components/header.dart';
 
 class CreatePostScreen extends StatefulWidget {
   const CreatePostScreen({super.key});
@@ -14,32 +15,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Create Post',
-          style: TextStyle(
-            color: Color(0xff5DB751),
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          icon: Image.asset('assets/icons/Frame 2.png', height: 50, width: 50),
-          onPressed: () {
-           
-            Navigator.pop(context);
-            }
-            ),
-         
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: CircleAvatar(
-              backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
-            ),
-          ),
-        ],
+      appBar: HeaderBar(title: 'Create Post',
+      onBackPress: () {
+        Navigator.pop(context);
+      },
+      
       ),
+      
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

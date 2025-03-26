@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:waste_to_wealth/controllers/activity_controller.dart'; // Import the controller
 import 'package:waste_to_wealth/models/activity_model.dart'; // Import the activity model
+import 'package:waste_to_wealth/screen/components/header.dart';
 
 class ActivityListPage extends StatefulWidget {
   const ActivityListPage({super.key});
@@ -10,41 +11,18 @@ class ActivityListPage extends StatefulWidget {
 }
 
 class _ActivityListPageState extends State<ActivityListPage> {
-  final ActivityController _activityController = ActivityController(); // Instantiate the controller
+  final ActivityController _activityController = ActivityController(); 
+  // Instantiate the controller
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "List Activity",
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        backgroundColor: Colors.green[500],
-        leading: IconButton(
-          icon:  Image.asset('assets/icons/Frame 2.png', height: 50, width: 50),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          // Small image in AppBar
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Image.asset(
-              'assets/icons/Ellipse 12.png',
-              width: 40, // Adjust size of the image here
-              height: 40, // Adjust size of the image here
-              fit: BoxFit.fill,
-            ),
-          ),
-        ],
+      appBar: const HeaderBar(
+        title: 'Activity List',
       ),
+    
+      
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
