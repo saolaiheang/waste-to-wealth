@@ -11,8 +11,7 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-return Scaffold(
-       appBar: AppBar(
+return AppBar(
         title: Text(
           title,
           style: TextStyle(
@@ -33,8 +32,8 @@ return Scaffold(
             ),
           ),
         ],
-      ),
-    );  }
+      );
+     }
 
 
   @override
