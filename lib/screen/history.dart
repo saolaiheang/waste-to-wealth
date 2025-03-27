@@ -237,4 +237,5 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
       ),
     );
   }
+  }
 

@@ -35,7 +35,7 @@ class ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start, // Keep the profile image at the top
           crossAxisAlignment: CrossAxisAlignment.center, // Center the text and avatar horizontally
