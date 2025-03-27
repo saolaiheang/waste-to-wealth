@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:waste_to_wealth/screen/homescreen.dart';
 import '../screen/components/navigate.dart';
 import 'package:waste_to_wealth/controllers/history_pickup_controller.dart';
 import 'package:waste_to_wealth/models/history_pickup_model.dart';
@@ -130,14 +131,15 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: BottomNavBar(currentIndex: 1),
       appBar: HeaderBar(
         title: 'History Pickup',
-        onBackPress: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => SchedulePickupScreen()),
-          );
-        },
+       onBackPress: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => HomePage()),
+                );
+            },
       ),
 
       body: Padding(
@@ -237,4 +239,4 @@ class _PickupScheduleHistoryState extends State<PickupScheduleHistory> {
       ),
     );
   }
-
+}

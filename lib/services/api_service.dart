@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:waste_to_wealth/models/homescreen_model.dart';
+import 'package:waste_to_wealth/models/redeem_model.dart';
 import 'package:waste_to_wealth/models/user_mdel.dart';
 import 'package:waste_to_wealth/services/storage_service.dart';
 import 'package:waste_to_wealth/models/schedule_model.dart';
@@ -95,8 +96,6 @@ class ApiService {
 
   
 
-
-  
   Future<int> fetchTotalPoints() async {
   final token = await _storageService.getToken();
   if (token == null) {
@@ -197,6 +196,25 @@ class ApiService {
       throw Exception('Failed to delete pickup: $e');
     }
   }
+
+   Future<List<Redeem>> fetchRedeems({int limit = 20}) async {
+    final token = await _storageService.getToken(); // Retrieve token
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/reward/listReward?limit=$limit'),
+      headers: {'Authorization': 'Bearer $token'}, // Use token
+    );
+
+    if (response.statusCode == 200) {
+      List<dynamic> data = jsonDecode(response.body);
+      return data.map((json) => Redeem.fromJson(json)).toList();
+    }
+    return [];
+  }
+
 }
 
 

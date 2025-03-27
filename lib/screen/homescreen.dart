@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:waste_to_wealth/screen/pickup.dart';
+import 'package:waste_to_wealth/screen/redeem.dart';
 import '../screen/components/navigate.dart';
 import 'package:waste_to_wealth/controllers/activity_controller.dart';
 import 'package:waste_to_wealth/controllers/homescreen_controller.dart';
 import 'package:waste_to_wealth/models/activity_model.dart';
 import 'package:waste_to_wealth/screen/activity.dart';
-import 'package:waste_to_wealth/screen/history.dart';
-import 'package:waste_to_wealth/screen/pickup.dart';
-import 'package:waste_to_wealth/screen/profile.dart';
-import 'package:waste_to_wealth/screen/redeem.dart';
-import 'package:waste_to_wealth/screen/social.dart';
 
 
 // Main HomePage Widget
@@ -119,7 +116,7 @@ class HomePageState extends State<HomePage> {
               // Navigate to a new page (Add your Redeem functionality here)
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => RedeemPage()),
+                MaterialPageRoute(builder: (context) => RedeemListPage()),
               );
             },
             child: const Row(
