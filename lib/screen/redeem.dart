@@ -1,30 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:waste_to_wealth/controllers/homescreen_controller.dart';
+import 'package:waste_to_wealth/controllers/redeem_controller.dart';
+import 'package:waste_to_wealth/models/redeem_model.dart';
 import 'package:waste_to_wealth/screen/components/header.dart';
 
-class RedeemPage extends StatefulWidget {
-  const RedeemPage({super.key});
+class RedeemListPage extends StatefulWidget {
+  const RedeemListPage({super.key});
 
   @override
-  _RedeemPageState createState() => _RedeemPageState();
+  _RedeemListPageState createState() => _RedeemListPageState();
 }
 
-class _RedeemPageState extends State<RedeemPage> {
-  Map<int, bool> loadingStates = {};
+class _RedeemListPageState extends State<RedeemListPage> {
+  final TotalPointsController _totalPointsController = TotalPointsController();
+  final RedeemController _redeemController = RedeemController();
+  List<bool> loadingStates = [];
 
-  void redeem(int index) {
+  @override
+  void initState() {
+    super.initState();
+    _loadRedeems();
+  }
+
+  Future<void> _loadRedeems() async {
+    final redeems = await _redeemController.fetchRedeems();
+    setState(() {
+      loadingStates = List.generate(redeems.length, (index) => false);
+    });
+  }
+
+  void redeem(int index) async {
     setState(() {
       loadingStates[index] = true;
     });
 
-    // Simulate API call delay
-    Future.delayed(Duration(seconds: 2), () {
-      setState(() {
-        loadingStates[index] = false;
-      });
-      // You can also show a success message here
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text("Redeemed successfully!")));
+    await Future.delayed(Duration(seconds: 2)); // Simulating a redeem process
+
+    setState(() {
+      loadingStates[index] = false;
     });
   }
 
@@ -32,103 +45,98 @@ class _RedeemPageState extends State<RedeemPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: HeaderBar(title: 'Redeem',
-      onBackPress: (){
-        Navigator.pop(context);
-      },
+      appBar: HeaderBar(
+        title: 'Redeem',
+        onBackPress: () {
+          Navigator.pop(context);
+        },
       ),
-
-
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    // Image/Icon Section
-                    Icon(
+                    const Icon(
                       Icons.eco,
                       color: Colors.green,
                       size: 100,
-                    ), // Adjusted size
-                    // Text & Points Section
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Rewards Balance",
-                            style: TextStyle(
-                              fontSize: 16, // Adjusted font size
-                              color: Colors.grey,
-                            ),
-                          ),
-                          SizedBox(height: 2), // Added space
-                          Text(
-                            "1963p",
-                            style: TextStyle(
-                              fontSize: 32, // Adjusted font size
+                    ),
+                    Row(mainAxisAlignment: MainAxisAlignment.start,
+
+              children: [
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Rewards Balance",
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    ),
+                    FutureBuilder<int>(
+                      future: _totalPointsController.fetchHomescreen(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text('Error: ${snapshot.error}');
+                        } else {
+                          return Text(
+                            '${snapshot.data} P',
+                            style: const TextStyle(
+                              fontSize: 32,
                               fontWeight: FontWeight.bold,
-                              color: Colors.green[500],
+                              color: Colors.green,
                             ),
-                          ),
-                        ],
-                      ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
-              ),
-              SizedBox(height: 20),
-              Expanded(
-                child: ListView(
-                  children: [
-                    rewardItem(
-                      0,
-                      "Cash Voucher",
-                      "\$10",
-                      500,
-                      Icons.attach_money,
-                    ),
-                    rewardItem(
-                      1,
-                      "Shopping Discount",
-                      "20% OFF",
-                      1000,
-                      Icons.percent,
-                    ),
-                    rewardItem(
-                      2,
-                      "Free PickUp",
-                      "1 Service",
-                      250,
-                      Icons.local_shipping,
-                    ),
-                    rewardItem(
-                      3,
-                      "Eco-Friendly Products",
-                      "Gift Box",
-                      750,
-                      Icons.card_giftcard,
-                    ),
-                    rewardItem(
-                      4,
-                      "Free PickUp",
-                      "1 Service",
-                      250,
-                      Icons.local_shipping,
-                    ),
+              ],
+            ),
                   ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: FutureBuilder<List<Redeem>>(
+                  future: _redeemController.fetchRedeems(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      debugPrint("Error fetching redeems: ${snapshot.error}");
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(child: Text('No redeems found.'));
+                    }
+
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (context, index) {
+                        final redeem = snapshot.data![index];
+                        return _rewardItem(
+                          title: redeem.title,
+                          description: redeem.description,
+                          exchangePoint: redeem.exchangePoint,
+                          icon: Icons.card_giftcard,
+                          index: index,
+                        );
+                      },
+                    );
+                  },
                 ),
               ),
             ],
@@ -138,18 +146,18 @@ class _RedeemPageState extends State<RedeemPage> {
     );
   }
 
-  Widget rewardItem(
-    int index,
-    String title,
-    String subtitle,
-    int points,
-    IconData icon,
-  ) {
+  Widget _rewardItem({
+    required String title,
+    required String description,
+    required int exchangePoint,
+    required IconData icon,
+    required int index,
+  }) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      padding: EdgeInsets.all(30),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Color(0xFFE1FFF3),
+        color: const Color(0xFFE1FFF3),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -158,38 +166,38 @@ class _RedeemPageState extends State<RedeemPage> {
           Row(
             children: [
               Icon(icon, color: Colors.green, size: 45),
-              SizedBox(width: 12),
+              const SizedBox(width: 12),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    subtitle,
+                    description,
                     style: TextStyle(fontSize: 14, color: Colors.green[700]),
                   ),
                   Text(
-                    "$points points",
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    "$exchangePoint points",
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),
             ],
           ),
-          loadingStates[index] == true
-              ? CircularProgressIndicator()
+          loadingStates.isNotEmpty && loadingStates[index]
+              ? const CircularProgressIndicator()
               : ElevatedButton(
-                onPressed: () => redeem(index),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green[500],
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  onPressed: () => redeem(index),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green[500],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
                   ),
+                  child: const Text("Redeem", style: TextStyle(color: Colors.white)),
                 ),
-                child: Text("Redeem", style: TextStyle(color: Colors.white)),
-              ),
         ],
       ),
     );
