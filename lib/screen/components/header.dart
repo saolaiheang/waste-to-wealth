@@ -29,7 +29,7 @@ return Scaffold(
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/icons/Ellipse 12.png'),
+              backgroundImage: AssetImage('assets/icons/Vector(10).png'),
             ),
           ),
         ],

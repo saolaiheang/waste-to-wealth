@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:waste_to_wealth/controllers/homescreen_controller.dart';
 import '../screen/components/navigate.dart';
+import 'package:waste_to_wealth/controllers/user_controller.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,6 +12,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   final TotalPointsController homescreenController = TotalPointsController();
+  final UserController userController = UserController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +39,13 @@ class ProfilePageState extends State<ProfilePage> {
       ),
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start, // Keep the profile image at the top
-          crossAxisAlignment: CrossAxisAlignment.center, // Center the text and avatar horizontally
+          mainAxisAlignment:
+              MainAxisAlignment.start, // Keep the profile image at the top
+          crossAxisAlignment:
+              CrossAxisAlignment
+                  .center, // Center the text and avatar horizontally
           children: [
+            
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30),
               child: CircleAvatar(
@@ -48,14 +54,26 @@ class ProfilePageState extends State<ProfilePage> {
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
-              "Mom Vouchheang",
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
+            FutureBuilder(
+              future: userController.fetchUser(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Text(
+                    ' ${snapshot.data?.userName as String}',
+                    style: TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  );
+                }
+              },
             ),
+
             const SizedBox(height: 4),
             buildHeader(),
             const SizedBox(height: 16),
@@ -75,10 +93,13 @@ class ProfilePageState extends State<ProfilePage> {
         borderRadius: BorderRadius.circular(10),
       ),
       constraints: BoxConstraints(
-        maxWidth: 450, // Set a max width to avoid the container becoming too wide
+        maxWidth:
+            450, // Set a max width to avoid the container becoming too wide
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0), // Padding for left and right
+        padding: const EdgeInsets.symmetric(
+          horizontal: 20.0,
+        ), // Padding for left and right
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -91,12 +112,16 @@ class ProfilePageState extends State<ProfilePage> {
                   children: [
                     const Text(
                       "Rewards Balance",
-                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     FutureBuilder<int>(
                       future: homescreenController.fetchHomescreen(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
@@ -128,8 +153,16 @@ class ProfilePageState extends State<ProfilePage> {
       child: Column(
         children: [
           buildOptionTile(Icons.edit, "Edit profile", "Customize your profile"),
-          buildOptionTile(Icons.notifications, "Notifications", "See your notifications"),
-          buildOptionTile(Icons.settings, "Settings", "Customize your settings"),
+          buildOptionTile(
+            Icons.notifications,
+            "Notifications",
+            "See your notifications",
+          ),
+          buildOptionTile(
+            Icons.settings,
+            "Settings",
+            "Customize your settings",
+          ),
           buildOptionTile(Icons.logout, "Log out", "Want to leave?"),
         ],
       ),
@@ -147,4 +180,4 @@ class ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-  }
+}
