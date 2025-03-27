@@ -28,6 +28,32 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
       initialDate: selectedDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+
+       builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.light(
+              primary: Color(0xffFF972F), // Header color
+              onPrimary: Colors.white, // Header text color
+              surface: Color(0XFF6C9182), // Dialog background color
+              onSurface: Color.fromARGB(255, 254, 254, 254), // Default text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Color.fromARGB(255, 243, 241, 240),
+              ),
+            ),
+            dialogTheme: DialogTheme(
+              backgroundColor: Color(0XFF6C9182), // Background color
+            ),
+          ),
+          child: SizedBox(
+            width: double.infinity,
+            height: 200,
+            child: child!,
+          ),
+        );
+      },
     );
 
     if (picked != null && picked != selectedDate) {
@@ -67,7 +93,13 @@ class _SchedulePickupScreenState extends State<SchedulePickupScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // backgroundColor: Colors.grey[100],
-      appBar: HeaderBar(title: 'Schedule Pickup'),
+      appBar: HeaderBar(title: 'Schedule Pickup',
+      onBackPress: () {
+        Navigator.pop(context);
+      },
+
+
+      ),
       
       body: Padding(
         padding: const EdgeInsets.all(20.0),

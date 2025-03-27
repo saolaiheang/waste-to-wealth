@@ -14,6 +14,8 @@ class UserController {
     }
     return user;
   }
-
+ Future <UserMdel?> fetchUser()async{
+    return await _apiService.fetchUser();
+  }
   
 }
